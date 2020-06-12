@@ -11,53 +11,55 @@ import random
 import termcolor
 import argparse
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.WARNING)
 
 EXIT_SUCCESS, EXIT_FAILURE = 0, 1
 
 
 def main():
-    if len(sys.argv) == 1:
+    parser = argparse.ArgumentParser(
+        description=str(
+            'Randomly choose an option from lines passed by stdin or from '
+            'options passed as arguments.'
+            )
+        )
+    parser.add_argument(
+        '-n',
+        dest='suppress_newline',
+        action='store_true',
+        help='suppress trailing newline for plain printing'
+        )
+    print_style = parser.add_mutually_exclusive_group()
+    print_style.add_argument(
+        '-p',
+        '--pretty',
+        dest='pretty',
+        action='store_true',
+        default=True,
+        help='pretty output to terminal (default)'
+        )
+    print_style.add_argument(
+        '-P',
+        '--plain',
+        dest='pretty',
+        action='store_false',
+        help='plain output'
+        )
+    parser.add_argument(
+        'options',
+        nargs='*',
+        help='list of options from which to randomly choose'
+        )
+
+    args = parser.parse_args()
+    logging.debug(f'args: {args}')
+
+    if args.options:
+        options = args.options
+    else:
         options = []
         for line in sys.stdin:
             options.append(line.strip())
-    else:
-        parser = argparse.ArgumentParser(
-            description=str(
-                'Randomly choose an option from lines passed by stdin or from '
-                'options passed as arguments.'
-            )
-        )
-        parser.add_argument(
-            '-n',
-            action='store_true',
-            help='suppress trailing newline for plain printing'
-        )
-        print_style = parser.add_mutually_exclusive_group()
-        print_style.add_argument(
-            '-p',
-            '--pretty',
-            dest='pretty',
-            action='store_true',
-            default=True,
-            help='pretty output (default)'
-        )
-        print_style.add_argument(
-            '-P',
-            '--plain',
-            dest='pretty',
-            action='store_false',
-            help='plain output'
-        )
-        parser.add_argument(
-            'options',
-            nargs='+',
-            help='list of options from which to randomly choose'
-        )
-        args = parser.parse_args()
-        logging.debug(f'args: {args}')
-
-        options = sys.argv[1:]
 
     logging.debug(f'options: {options}')
     random.seed()
@@ -65,12 +67,13 @@ def main():
     try:
         selection = random.choice(options)
     except IndexError:
-        print('No options provided.', file=sys.stderr)
+        print('Error: no options provided.', file=sys.stderr)
+        parser.print_help()
         return EXIT_FAILURE
 
     logging.debug(f'selection: {selection}')
 
-    if sys.stdout.isatty():
+    if sys.stdout.isatty() and args.pretty:
         styled_selection = termcolor.colored(
             f' {selection} ',
             attrs=['bold', 'reverse']
@@ -81,7 +84,8 @@ def main():
             '\n'
         )
     else:
-        print(selection)
+        endline = '' if args.suppress_newline else '\n'
+        print(selection, end=endline)
 
     return EXIT_SUCCESS
 
