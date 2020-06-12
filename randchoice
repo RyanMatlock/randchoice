@@ -7,8 +7,9 @@ choice from one of those options.
 
 import sys
 import logging
+import random
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.WARNING)
 
 
 def main():
@@ -20,6 +21,11 @@ def main():
         options = sys.argv[1:]
 
     logging.debug(options)
+
+    random.seed()
+    selection = random.choice(options)
+    print(selection)
+
     return 0
 
 
