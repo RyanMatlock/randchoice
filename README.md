@@ -13,10 +13,12 @@ flags.
 
 ## Examples
 
+These examples assume that `randchoice` exists somewhere on your `$PATH`.
+
 ### Choosing an option from arguments
 
 ```sh
-randchoice "foo bar" baz quux
+$ randchoice "foo bar" baz quux
 
 The choice is  quux 
 
