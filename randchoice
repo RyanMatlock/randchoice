@@ -8,7 +8,7 @@ choice from one of those options.
 import sys
 import logging
 import random
-from blessings import Terminal
+import termcolor
 
 logging.basicConfig(level=logging.WARNING)
 
@@ -27,10 +27,14 @@ def main():
     selection = random.choice(options)
 
     if sys.stdout.isatty():
-        term = Terminal()
+        styled_selection = termcolor.colored(
+            f' {selection} ',
+            attrs=['bold', 'reverse']
+        )
         print(
-            'The choice is ' +
-            term.reverse(term.bold(f' {selection} '))
+            '\n'
+            f'The choice is {styled_selection}'
+            '\n'
         )
     else:
         print(selection)
