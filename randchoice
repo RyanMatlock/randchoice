@@ -6,10 +6,22 @@ choice from one of those options.
 """
 
 import sys
+import logging
 
-options = []
+logging.basicConfig(level=logging.DEBUG)
 
-for line in sys.stdin:
-    options.append(line.strip())
 
-print(options)
+def main():
+    if len(sys.argv) == 1:
+        options = []
+        for line in sys.stdin:
+            options.append(line.strip())
+    else:
+        options = sys.argv[1:]
+
+    logging.debug(options)
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
