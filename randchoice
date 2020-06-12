@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+"""randchoice
+
+Read lines from stdin or choose from arguments passed to script and print a
+choice from one of those options.
+"""
