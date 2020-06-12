@@ -4,3 +4,12 @@
 Read lines from stdin or choose from arguments passed to script and print a
 choice from one of those options.
 """
+
+import sys
+
+options = []
+
+for line in sys.stdin:
+    options.append(line.strip())
+
+print(options)
