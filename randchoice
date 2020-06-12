@@ -8,6 +8,7 @@ choice from one of those options.
 import sys
 import logging
 import random
+from blessings import Terminal
 
 logging.basicConfig(level=logging.WARNING)
 
@@ -24,7 +25,15 @@ def main():
 
     random.seed()
     selection = random.choice(options)
-    print(selection)
+
+    if sys.stdout.isatty():
+        term = Terminal()
+        print(
+            'The choice is ' +
+            term.reverse(term.bold(f' {selection} '))
+        )
+    else:
+        print(selection)
 
     return 0
 
