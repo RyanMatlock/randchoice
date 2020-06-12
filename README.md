@@ -5,7 +5,7 @@ of options passed in either through `stdin` or as arguments to the script.
 
 There are two modes of using `randchoice`: either providing a list of options
 as arguments to the script or by piping in a list through `stdin` (e.g. `$ less
-./tests/restaurants.txt | ./randchoice`). By default, the output will be
+./example_data/restaurants.txt | ./randchoice`). By default, the output will be
 "prettily" printed to terminal outputs and plainly printed otherwise. In the
 latter case, the trailing newline can be omitted with the `-n` flag. To print
 plainly to a terminal, pass the `-P` (note: that's a capital P) or `--plain`
