@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """randchoice
 
-Read lines from stdin or choose from arguments passed to script and print a
-choice from one of those options.
+Pick an option from list passed in through stdin and/or arguments passed to the
+script.
 """
 
 import sys
@@ -17,6 +17,11 @@ EXIT_SUCCESS, EXIT_FAILURE = 0, 1
 
 
 def main():
+    options = []
+
+    if not sys.stdin.isatty():
+        options += [line.strip() for line in sys.stdin.readlines()]
+
     parser = argparse.ArgumentParser(
         description=str(
             'Randomly choose an option from lines passed by stdin or from '
@@ -54,12 +59,7 @@ def main():
     args = parser.parse_args()
     logging.debug(f'args: {args}')
 
-    if args.options:
-        options = args.options
-    else:
-        options = []
-        for line in sys.stdin:
-            options.append(line.strip())
+    options += args.options
 
     logging.debug(f'options: {options}')
     random.seed()
