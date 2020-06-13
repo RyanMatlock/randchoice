@@ -1,5 +1,5 @@
 `randchoice` is a tiny script that helps indecisive people choose from a list
-of options passed in either through `stdin` or as arguments to the script.
+of options passed in through `stdin` and/or as arguments to the script.
 
 ## Usage
 
@@ -34,3 +34,13 @@ node
 ```
 
 This demonstrates how `randchoice` plays nicely with piping.
+
+### Pick a movie
+
+```sh
+$ less example_data/movies.txt | randchoice "Heat"
+The choice is  The Matrix 
+```
+
+## To-dos
+1. Add flag for comment characters from `stdin`.
