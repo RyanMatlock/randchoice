@@ -26,14 +26,14 @@ def main():
         description=str(
             'Randomly choose an option from lines passed by stdin or from '
             'options passed as arguments.'
-            )
         )
+    )
     parser.add_argument(
         '-n',
         dest='suppress_newline',
         action='store_true',
         help='suppress trailing newline for plain printing'
-        )
+    )
     print_style = parser.add_mutually_exclusive_group()
     print_style.add_argument(
         '-p',
@@ -42,19 +42,19 @@ def main():
         action='store_true',
         default=True,
         help='pretty output to terminal (default)'
-        )
+    )
     print_style.add_argument(
         '-P',
         '--plain',
         dest='pretty',
         action='store_false',
         help='plain output'
-        )
+    )
     parser.add_argument(
         'options',
         nargs='*',
         help='list of options from which to randomly choose'
-        )
+    )
 
     args = parser.parse_args()
     logging.debug(f'args: {args}')
