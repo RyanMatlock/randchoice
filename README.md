@@ -67,9 +67,14 @@ using a terminal), but I can conceive of a possible situation to use this
 
 > Picky Person: "I don't know where I want to eat tonight. Can you choose
 > something?"
+>
 > Nerdy Person: "How about I narrow it down to two or three choices, and you
 > can pick what you're most in the mood for?"
+>
 > Picky Person: "No, just choose something."
+>
 > Nerdy Person: "Ok, between Foo, Bar, and Baz, the computer says Bar."
+>
 > Picky Person: "I just had Bar. Let's just go to Foo."
+>
 > Nerdy Person: "That works."
