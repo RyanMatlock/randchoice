@@ -29,26 +29,31 @@ def main():
         )
     )
     parser.add_argument(
+        '-d',
+        '--debug',
+        action='store_true',
+        help='turn on debugging mode'
+    )
+    parser.add_argument(
+        '-c',
+        '--choose',
+        metavar='N',
+        type=int,
+        default=1,
+        help='number of items to choose, assuming N ≤ len(options)'
+    )
+    parser.add_argument(
         '-n',
+        '--newline',
         dest='suppress_newline',
         action='store_true',
         help='suppress trailing newline for plain printing'
     )
-    print_style = parser.add_mutually_exclusive_group()
-    print_style.add_argument(
+    parser.add_argument(
         '-p',
-        '--pretty',
-        dest='pretty',
-        action='store_true',
-        default=True,
-        help='pretty output to terminal (default)'
-    )
-    print_style.add_argument(
-        '-P',
         '--plain',
-        dest='pretty',
-        action='store_false',
-        help='plain output'
+        action='store_true',
+        help='plain output (automatic if sys.stdout.isatty() is False)'
     )
     parser.add_argument(
         'options',
@@ -57,38 +62,58 @@ def main():
     )
 
     args = parser.parse_args()
+
+    if args.debug:
+        logging.getLogger().setLevel(logging.DEBUG)
+
     logging.debug(f'args: {args}')
 
     options += args.options
+    num_choices = args.choose
 
     logging.debug(f'options: {options}')
     random.seed()
 
-    try:
-        selection = random.choice(options)
-    except IndexError:
-        print('Error: no options provided.', file=sys.stderr)
-        parser.print_help()
-        return EXIT_FAILURE
+    if num_choices > len(options):
+        raise ValueError(
+            f'Number of choices requested exceeds ({num_choices}) number of '
+            f'options available ({len(options)}).'
+        )
 
-    logging.debug(f'selection: {selection}')
+    selections = []
+    for _ in range(num_choices):
+        choice = random.choice(options)
+        options.remove(choice)
+        selections.append(choice)
+    logging.debug(f'selections: {selections}')
+    logging.debug(f'(remaining) options: {options}')
 
-    if sys.stdout.isatty() and args.pretty:
+    if sys.stdout.isatty() and not args.plain:
         styled_selection = termcolor.colored(
-            f' {selection} ',
+            f' {", ".join(selections)} ',
             attrs=['bold', 'reverse']
         )
+
+        if num_choices > 1:
+            lead_in = 'The choices are '
+        else:
+            lead_in = 'The choice is '
+
         print(
             '\n'
-            f'The choice is {styled_selection}'
+            f'{lead_in}{styled_selection}'
             '\n'
         )
     else:
         endline = '' if args.suppress_newline else '\n'
-        print(selection, end=endline)
+        print('\n'.join(selections), end=endline)
 
     return EXIT_SUCCESS
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except Exception as e:
+        print(e, file=sys.stderr)
+        sys.exit(EXIT_FAILURE)
