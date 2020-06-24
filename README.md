@@ -8,8 +8,11 @@ as arguments to the script or by piping in a list through `stdin` (e.g. `$ less
 ./example_data/restaurants.txt | ./randchoice`). By default, the output will be
 "prettily" printed to terminal outputs and plainly printed otherwise. In the
 latter case, the trailing newline can be omitted with the `-n` flag. To print
-plainly to a terminal, pass the `-P` (note: that's a capital P) or `--plain`
-flags.
+plainly to a terminal, pass the `-p` or `--plain` flag. Specify how many items
+to choose with the `-c` or `--choose` flag.
+
+If I've neglected to update this documentation after adding/changing a feature,
+check the help text with the `-h` or `--help` flag.
 
 ## Examples
 
