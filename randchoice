@@ -71,6 +71,12 @@ def main():
     options += args.options
     num_choices = args.choose
 
+    if num_choices < 1:
+        raise ValueError(
+            f'Must take a positive integer number of choices (given '
+            f'{num_choices})'
+        )
+
     logging.debug(f'options: {options}')
     random.seed()
 
