@@ -16,6 +16,34 @@ logging.basicConfig(level=logging.WARNING)
 EXIT_SUCCESS, EXIT_FAILURE = 0, 1
 
 
+def int_gt_zero(string):
+    """Ensures input is an integer greater than zero for argparse type
+    conversion.
+
+    Args:
+        string (str): argparse input
+
+    Returns:
+        int: int(string) if string is a positive int
+
+    Raises:
+        argparse.ArgumentTypeError: if int(string) < 1
+    """
+    try:
+        i = int(string)
+    except ValueError as e:
+        raise argparse.ArgumentTypeError(
+            f'argument must be int > 0 (ValueError: {e})'
+        )
+
+    if i < 1:
+        raise argparse.ArgumentTypeError(
+            f"argument '{i}' cannot be less than 1"
+        )
+
+    return i
+
+
 def main():
     options = []
 
@@ -38,9 +66,9 @@ def main():
         '-c',
         '--choose',
         metavar='N',
-        type=int,
+        type=int_gt_zero,
         default=1,
-        help='number of items to choose, assuming N ≤ len(options)'
+        help='number of items to choose, 0 < N ≤ len(options)'
     )
     parser.add_argument(
         '-n',
@@ -70,12 +98,6 @@ def main():
 
     options += args.options
     num_choices = args.choose
-
-    if num_choices < 1:
-        raise ValueError(
-            f'Must take a positive integer number of choices (given '
-            f'{num_choices})'
-        )
 
     logging.debug(f'options: {options}')
     random.seed()
