@@ -38,9 +38,38 @@ This demonstrates how `randchoice` plays nicely with piping.
 ### Pick a movie
 
 ```sh
-$ less example_data/movies.txt | randchoice "Heat"
+$ less example_data/movies.txt | sed '/^#/d' | sort | uniq | randchoice "Heat"
+
 The choice is  The Matrix 
+
 ```
 
-## To-dos
-1. Add flag for comment characters from `stdin`.
+There is much I have to learn about useful *nix programs, so I'm including the
+`sed`, `sort`, and `uniq` stuff as a reminder to myself for how to filter out
+comments and repeated entries. Being able to use `sed` to suppress comments
+means I don't need to include that functionality in `randchoice`.
+
+### Narrow down restaurants to 3 finalists, pick one of those
+
+```sh
+$ less example_data/restaurants.txt | randchoice -c 3 | tee /dev/tty | randchoice
+In-N-Out
+Sage
+Castle BBQ
+
+The choice is  In-N-Out 
+
+```
+
+Again, this contrived example is mostly a reminder to myself that I can display
+output in the middle of a series of pipes with `tee /dev/tty` (assuming I'm
+using a terminal), but I can conceive of a possible situation to use this
+
+> Picky Person: "I don't know where I want to eat tonight. Can you choose
+> something?"
+> Nerdy Person: "How about I narrow it down to two or three choices, and you
+> can pick what you're most in the mood for?"
+> Picky Person: "No, just choose something."
+> Nerdy Person: "Ok, between Foo, Bar, and Baz, the computer says Bar."
+> Picky Person: "I just had Bar. Let's just go to Foo."
+> Nerdy Person: "That works."
