@@ -1,6 +1,10 @@
+# lines starting with '#' should be filtered out by sed
+# sed '/^#/d'
 Clueless
 The Matrix
+Body Double
 Elvira: Mistress of the Dark
 Point Break
 Daisies (Sedmikrásky)
 Body Double
+Dead Ringers
